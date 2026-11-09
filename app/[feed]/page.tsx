@@ -3,7 +3,11 @@ import { notFound } from "next/navigation";
 import { FeedView } from "@/components/story/feed-view";
 import { FEEDS, isFeed } from "@/lib/hn/types";
 
-export const revalidate = 60;
+export const revalidate = 900;
+
+// Only the feeds below exist. Any other path is a static 404, so scanner URLs
+// like /wp-login.php never run a function or write to the ISR cache.
+export const dynamicParams = false;
 
 // Pre-render the static feed routes (skip "top" — that lives at "/").
 export function generateStaticParams() {

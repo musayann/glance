@@ -25,5 +25,8 @@ export function useFeed(feed: Feed, initialPage: FeedPage) {
       pages: [initialPage],
       pageParams: [0],
     },
+    // The server copy can be up to 15 minutes old, so treat it as stale and
+    // refresh on mount. This goes straight to Firebase and costs nothing on Vercel.
+    initialDataUpdatedAt: 0,
   });
 }

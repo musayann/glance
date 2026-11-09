@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { ArrowUp, MessageSquare } from "lucide-react";
 
+import { TimeAgo } from "@/components/time-ago";
 import type { HNItem } from "@/lib/hn/types";
-import { getDomain, timeAgo } from "@/lib/hn/format";
+import { getDomain } from "@/lib/hn/format";
 
 export function StoryRow({ story, rank }: { story: HNItem; rank?: number }) {
   const domain = getDomain(story.url);
@@ -25,7 +26,7 @@ export function StoryRow({ story, rank }: { story: HNItem; rank?: number }) {
               {story.title}
             </a>
           ) : (
-            <Link href={titleHref} className="hover:underline">
+            <Link href={titleHref} prefetch={false} className="hover:underline">
               {story.title}
             </Link>
           )}
@@ -44,13 +45,18 @@ export function StoryRow({ story, rank }: { story: HNItem; rank?: number }) {
             </span>
           )}
           {story.by && (
-            <Link href={`/user/${story.by}`} className="hover:text-foreground hover:underline">
+            <Link
+              href={`/user/${story.by}`}
+              prefetch={false}
+              className="hover:text-foreground hover:underline"
+            >
               {story.by}
             </Link>
           )}
-          {story.time && <span>{timeAgo(story.time)}</span>}
+          {story.time && <TimeAgo time={story.time} />}
           <Link
             href={`/item/${story.id}`}
+            prefetch={false}
             className="hover:text-foreground inline-flex items-center gap-1 hover:underline"
           >
             <MessageSquare className="size-3.5" />

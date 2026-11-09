@@ -7,8 +7,6 @@ import { Separator } from "@/components/ui/separator";
 import { getUser } from "@/lib/hn/firebase";
 import { formatDate } from "@/lib/hn/format";
 
-export const revalidate = 300;
-
 export async function generateMetadata({
   params,
 }: {

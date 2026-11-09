@@ -5,7 +5,7 @@ import { ChevronDown, ChevronRight } from "lucide-react";
 import { useState } from "react";
 
 import { HnHtml } from "@/components/hn-html";
-import { timeAgo } from "@/lib/hn/format";
+import { TimeAgo } from "@/components/time-ago";
 import type { AlgoliaComment } from "@/lib/hn/types";
 import { cn } from "@/lib/utils";
 
@@ -51,6 +51,7 @@ export function CommentNode({
           {comment.author ? (
             <Link
               href={`/user/${comment.author}`}
+              prefetch={false}
               className="hover:text-foreground font-medium hover:underline"
             >
               {comment.author}
@@ -58,7 +59,7 @@ export function CommentNode({
           ) : (
             <span className="italic">[deleted]</span>
           )}
-          <span>{timeAgo(Math.floor(new Date(comment.created_at).getTime() / 1000))}</span>
+          <TimeAgo time={Math.floor(new Date(comment.created_at).getTime() / 1000)} />
           {!open && replyCount > 0 && (
             <span className="text-muted-foreground/70">
               ({replyCount} {replyCount === 1 ? "reply" : "replies"})

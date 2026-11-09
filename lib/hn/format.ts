@@ -34,6 +34,7 @@ export function formatDate(unixSeconds: number): string {
     year: "numeric",
     month: "short",
     day: "numeric",
+    timeZone: "UTC", // Keeps server and hydration output identical.
   });
 }
 

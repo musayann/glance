@@ -2,12 +2,10 @@ import { FEEDS, type Feed, type HNItem, type HNUser } from "./types";
 
 const BASE = "https://hacker-news.firebaseio.com/v0";
 
-// Revalidate cached responses every 60s on the server. On the client this
-// option is ignored and the browser/React Query handle caching instead.
-const REVALIDATE = 60;
-
+// No per-request cache here: pages are cached as a whole, and caching each
+// story separately would only add 31 cache entries per feed refresh.
 async function getJSON<T>(url: string): Promise<T> {
-  const res = await fetch(url, { next: { revalidate: REVALIDATE } });
+  const res = await fetch(url);
   if (!res.ok) {
     throw new Error(`HN request failed (${res.status}): ${url}`);
   }

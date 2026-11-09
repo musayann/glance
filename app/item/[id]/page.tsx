@@ -4,14 +4,13 @@ import { ArrowUp, ExternalLink, MessageSquare } from "lucide-react";
 
 import { CommentTree } from "@/components/comments/comment-tree";
 import { HnHtml } from "@/components/hn-html";
+import { TimeAgo } from "@/components/time-ago";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { getItem } from "@/lib/hn/firebase";
 import { getItemTree } from "@/lib/hn/algolia";
-import { formatDate, getDomain, hnItemUrl, timeAgo } from "@/lib/hn/format";
+import { getDomain, hnItemUrl } from "@/lib/hn/format";
 import type { AlgoliaComment } from "@/lib/hn/types";
-
-export const revalidate = 60;
 
 export async function generateMetadata({
   params,
@@ -90,11 +89,15 @@ export default async function ItemPage({
             </Badge>
           )}
           {author && (
-            <Link href={`/user/${author}`} className="hover:text-foreground hover:underline">
+            <Link
+              href={`/user/${author}`}
+              prefetch={false}
+              className="hover:text-foreground hover:underline"
+            >
               {author}
             </Link>
           )}
-          {time && <span title={formatDate(time)}>{timeAgo(time)}</span>}
+          {time && <TimeAgo time={time} />}
           <span className="inline-flex items-center gap-1">
             <MessageSquare className="size-3.5" />
             {commentCount} {commentCount === 1 ? "comment" : "comments"}
