@@ -28,8 +28,9 @@ and [shadcn/ui](https://ui.shadcn.com/).
 No API key required. Two public Hacker News APIs:
 
 - **Official Firebase API** (`hacker-news.firebaseio.com/v0`) — feed lists, items, users.
-  Feed pages use 15-minute ISR and refresh from the browser on load. Story and
-  user pages render on demand and are cached at the Vercel CDN for 15 minutes.
+  Feed pages use 15-minute ISR and refresh from the browser only when the cached
+  copy is older than that. Story and user pages render on demand and are cached
+  at the Vercel CDN for 15 minutes.
   See `lib/hn/firebase.ts`.
 - **Algolia HN Search API** (`hn.algolia.com/api/v1`) — search, full comment trees,
   and user submissions. See `lib/hn/algolia.ts`.

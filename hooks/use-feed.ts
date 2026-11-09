@@ -10,23 +10,28 @@ export interface FeedPage {
   hasMore: boolean;
   total: number;
   page: number;
+  fetchedAt: number;
 }
+
+// Matches `revalidate` in app/page.tsx and app/[feed]/page.tsx.
+const FEED_STALE_MS = 15 * 60_000;
 
 export function useFeed(feed: Feed, initialPage: FeedPage) {
   return useInfiniteQuery({
     queryKey: ["feed", feed],
     initialPageParam: 0,
     queryFn: async ({ pageParam }): Promise<FeedPage> => {
-      const { items, hasMore, total } = await getFeedPage(feed, pageParam);
-      return { items, hasMore, total, page: pageParam };
+      const result = await getFeedPage(feed, pageParam);
+      return { ...result, page: pageParam };
     },
     getNextPageParam: (last) => (last.hasMore ? last.page + 1 : undefined),
     initialData: {
       pages: [initialPage],
       pageParams: [0],
     },
-    // The server copy can be up to 15 minutes old, so treat it as stale and
-    // refresh on mount. This goes straight to Firebase and costs nothing on Vercel.
-    initialDataUpdatedAt: 0,
+    // A refresh costs 31 Firebase requests, so only refetch on mount when the
+    // server copy is really past its ISR window (e.g. after a quiet spell).
+    initialDataUpdatedAt: initialPage.fetchedAt,
+    staleTime: FEED_STALE_MS,
   });
 }

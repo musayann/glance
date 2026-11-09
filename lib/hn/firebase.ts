@@ -52,10 +52,20 @@ export async function getFeedPage(
   feed: Feed,
   page: number,
   pageSize = 30,
-): Promise<{ items: HNItem[]; hasMore: boolean; total: number }> {
+): Promise<{
+  items: HNItem[];
+  hasMore: boolean;
+  total: number;
+  fetchedAt: number;
+}> {
   const ids = await getFeedIds(feed);
   const start = page * pageSize;
   const slice = ids.slice(start, start + pageSize);
   const items = await getItems(slice);
-  return { items, hasMore: start + pageSize < ids.length, total: ids.length };
+  return {
+    items,
+    hasMore: start + pageSize < ids.length,
+    total: ids.length,
+    fetchedAt: Date.now(),
+  };
 }
